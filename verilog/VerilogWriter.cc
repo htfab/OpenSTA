@@ -420,9 +420,15 @@ VerilogWriter::writeAssigns(Instance *inst)
                                          network_->pathEscape());
       string net_vname = netVerilogName(network_->name(net),
                                         network_->pathEscape());
-      fprintf(stream_, " assign %s = %s;\n",
-              port_vname.c_str(),
-              net_vname.c_str());
+      if (network_->direction(port)->isPowerGround()) {
+        fprintf(stream_, " assign %s = %s;\n",
+                net_vname.c_str(),
+                port_vname.c_str());
+      } else {
+        fprintf(stream_, " assign %s = %s;\n",
+                port_vname.c_str(),
+                net_vname.c_str());
+      }
     }
   }
   delete pin_iter;
